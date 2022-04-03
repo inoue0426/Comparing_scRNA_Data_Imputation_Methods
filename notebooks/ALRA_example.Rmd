@@ -1,0 +1,37 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+source('alra.R')
+```
+
+
+```{r}
+# Run at your terminal
+# !curl https://gauss.math.yale.edu/~gcl22/alra/b_nk_example.RDS --output b_nk_example.RDS
+# !curl https://gauss.math.yale.edu/~gcl22/alra/labels_example.RDS --output labels_example.RDS
+```
+
+```{r}
+A <- readRDS('b_nk_example.RDS')
+labels <- readRDS('labels_example.RDS')
+```
+
+```{r}
+# Library and log normalize the data
+A_norm <- normalize_data(A)
+# Choose k. 
+k_choice <- choose_k(A_norm)
+```
+
+```{r}
+A_norm_completed <- alra(A_norm,k=k_choice$k)[[3]]
+```
+
+```{r}
+print(aggregate(A_norm[,c('NCAM1','CR2')], by=list(" "=labels),FUN=function(x) round(c(percent=100*sum(x>0)/length(x)),1)))
+print(aggregate(A_norm_completed[,c('NCAM1','CR2')], by=list(" "=labels),FUN=function(x) round(c(percent=100*sum(x>0)/length(x)),1)))
+```
